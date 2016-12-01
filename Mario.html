@@ -29,7 +29,7 @@
         
           background(bg);
           randomBuilding.drawBuilding();
-          
+          randomBuilding.moveBuilding();
         
         } 
         
@@ -101,6 +101,18 @@
 
         	
         	}
+
+          void moveBuilding()
+          {
+
+            mvBuilding();
+
+          }
+
+          void mvBuilding(){
+            centerX += 3;
+
+          }
         
         }
         </script> 
