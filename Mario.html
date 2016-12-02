@@ -3,135 +3,96 @@
 		<title>Mario</title>
 		<script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
 		<script type="text/processing" data-processing-target="mycanvas">
-        // Declare and contruct two objects (h1, h2) from the class HorizontalLine
+    
+      //Fixed variables
+      SkyLine sl = new SkyLine();
 
-        // Declare and contruct two objects (h1, h2) from the class HorizontalLine
+      int WINDOW_WIDTH = 700;
+      int WINDOW_HEIGHT = 400;
 
-        Building randomBuilding = new Building(100, 100);
-				ArrayList<Building> buildingList;
-        int WINDOW_WIDTH = 700;
-        int WINDOW_HEIGHT = 400;
+      int REFRESH_RATE_PER_SECOND = 30;
+      Var bg = (0,0,0);
 
-        int REFRESH_RATE_PER_SECOND = 30;
-        Var bg = (0,0,0);
-        //runs once at the start of the program
-        void setup()
-        {
+      //runs once at the start of the program
 
-          size(WINDOW_WIDTH, WINDOW_HEIGHT);
+      void setup(){
+        size(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-          frameRate(REFRESH_RATE_PER_SECOND);//how often per second the draw function is called
+        frameRate(REFRESH_RATE_PER_SECOND);//how often per second the draw function is called
+      }
 
-					buildingList = new ArrayList<Building>();
+      void draw(){
+        background(bg);
+        sl.addBuilding();
+        sl.drawSkyLine();
+      }
 
-					var numBuilding = random(5,10);
+      class SkyLine{
+        //attributes
+        ArrayList <Building> buildingList;
+        var xPos;
 
-					for(var i = 0; i < numBuilding; i++)
-					{
-						buildingList.add(new Building(100,100));
-					}
-
+        //constructor
+        SkyLine(){
+          buildingList = new ArrayList<Building>();
+          xPos = 0;
         }
 
-
-        //called repeatedly
-        void draw() {
-
-          background(bg);
-      
-
-					for(var i = 0; i < buildingList.size(); i++)
-					{
-
-						Building currentBuilding = buildingList.get(i);
-						currentBuilding.drawBuilding();
-						currentBuilding.moveBuilding();
-					}
-
+        void drawSkyLine(){
+          for(var i=0; i<buildingList.size(); i++){
+          currentBuilding.drawBuilding();
+          }
         }
 
-
-
-        class HorizontalLine {
-
-          //attributes
-          float ypos, speed;
-
-          //constructor
-          HorizontalLine (float y, float s) {
-
-            ypos = y;
-
-            speed = s;
-
-          }
-
-          void updateAndRedraw() {
-          	update();
-          	drawLine();
-          }
-
-          void update()
-          {
-
-            ypos += speed;
-
-            if (ypos > height)
-            {
-
-              ypos = 0;
-
-            }
-
-
-          }
-
-          void drawLine()
-          {
-          	 line(0, ypos, width, ypos);
-		  }
-
+        void addBuilding(){
+          var cbw = random (10, 80); //cbw = current building width
+          Building currentBuilding = new Building (xPos, cbw);
+          buildingList.add(currentBuilding);
+          xPos += cbw;
         }
 
-        class Building
-        {
-        	//attributes
-        	var centerX, centerY, bHeight, bWidth, bColor;
-
-        	//constructor
-        	Building(var bh, var bl)
-        	{
-        		//attributes on the left, parameters on the right
-        		bHeight = random(100, 400);
-        		bWidth = (50, 100);
-        		bColor = color(random(150, 255), random(190, 255), 255);
-        		centerX = random(200, 500);
-        		centerY = 400-bHeight;
-
-        	}
-
-        	void drawBuilding()
-        	{
-        		fill(bColor);
-            rect(centerX, centerY, bWidth, bHeight);
-        		// body
-
-
-        	}
-
-          void moveBuilding()
-          {
-
-            mvBuilding();
-
+        void moveSkyLine(){
+          for(var i=0; i<buildingList.size(); i++){
+            Building currentBuilding = buildingList.get(i);
+            currentBuilding.moveBuilding();
+            xPos += 3;
           }
-
-          void mvBuilding(){
-            centerX += 3;
-
-          }
-
         }
+
+      }
+
+      class Building{
+        //attributes
+        var centerX, centerY, bHeight, bWidth, bColor;
+
+        //constructor
+        Building(var x, var bw){
+          bHeight = random(150, 200);
+          bWdith = bw;
+          centerX = x;
+          centerY = 400-bheight;
+          bColor = color(random(150, 255), random(190, 255), 255);
+        }
+
+        void drawBuilding(){
+          fill(bColor);
+            rect(x, centerY, bw, bHeight);
+        }
+
+        void moveBuilding(){
+          mvBuilding();
+        }
+
+        void mvBuilding(){
+          x += 3;
+        }
+
+      }
+
+
+
+
+
         </script>
     </head>
 
