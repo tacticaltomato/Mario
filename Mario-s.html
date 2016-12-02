@@ -31,34 +31,39 @@
         //attributes
         ArrayList <Building> buildingList;
         var xPos;
+        var cbw;
 
         //constructor
-        SkyLine(){
-          buildingList = new ArrayList<Building>();
+        SkyLine()
+        {
+          buildingList = new ArrayList <Building>();
           xPos = 0;
+          cbw = random (20, 80);
         }
 
         void drawSkyLine(){
-          for(var i=0; i<buildingList.size(); i++){
+          println(buildingList.size());
+          for(var i = 0; i < buildingList.size(); i++){
           currentBuilding.drawBuilding();
           }
         }
 
-        void addBuilding(){
-          var cbw = random (10, 80); //cbw = current building width
-          Building currentBuilding = new Building (xPos, cbw);
+        void addBuilding(){ //problem
+          //println("about to add building");
+          //println(cbw);
+          currentBuilding = new Building (xPos, cbw);
           buildingList.add(currentBuilding);
           xPos += cbw;
+          //println("added building");
         }
 
         void moveSkyLine(){
-          for(var i=0; i<buildingList.size(); i++){
+          for(var i = 0; i < buildingList.size(); i++){
             Building currentBuilding = buildingList.get(i);
             currentBuilding.moveBuilding();
             xPos += 3;
           }
         }
-
       }
 
       class Building{
@@ -70,7 +75,7 @@
           bHeight = random(150, 200);
           bWdith = bw;
           centerX = x;
-          centerY = 400-bheight;
+          centerY = 400-bHeight;
           bColor = color(random(150, 255), random(190, 255), 255);
         }
 
