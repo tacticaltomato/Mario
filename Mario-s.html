@@ -3,7 +3,7 @@
 		<title>Mario</title>
 		<script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
 		<script type="text/processing" data-processing-target="mycanvas">
-    
+
       //Fixed variables
       SkyLine sl = new SkyLine();
 
@@ -17,7 +17,6 @@
 
       void setup(){
         size(WINDOW_WIDTH, WINDOW_HEIGHT);
-
         frameRate(REFRESH_RATE_PER_SECOND);//how often per second the draw function is called
       }
 
@@ -25,6 +24,7 @@
         background(bg);
         sl.addBuilding();
         sl.drawSkyLine();
+				sl.moveSkyLine();
       }
 
       class SkyLine{
@@ -32,36 +32,47 @@
         ArrayList <Building> buildingList;
         var xPos;
         var cbw;
+				Building currentBuilding;
 
         //constructor
-        SkyLine()
-        {
+        SkyLine(){
           buildingList = new ArrayList <Building>();
           xPos = 0;
-          cbw = random (20, 80);
+          cbw = (int) random (20, 80);
+					buildingList.add(new Building(0, cbw));
         }
 
         void drawSkyLine(){
-          println(buildingList.size());
+          //println(buildingList.size());
           for(var i = 0; i < buildingList.size(); i++){
-          currentBuilding.drawBuilding();
+						//println(i);
+          	Building building = buildingList.get(i);
+						//println("hello");
+						//println(building.centerX);
+						building.drawBuilding();
+						//println(building.centerX+" "+building.centerY);
           }
         }
 
-        void addBuilding(){ //problem
+        void addBuilding(){
           //println("about to add building");
           //println(cbw);
-          currentBuilding = new Building (xPos, cbw);
-          buildingList.add(currentBuilding);
-          xPos += cbw;
+          currentBuilding = new Building (0, cbw);
+					println(xPos+" "+cbw);
+					if(xPos%(2*cbw)==0){
+						buildingList.add(currentBuilding);
+					}
+
+          //xPos += cbw;
           //println("added building");
         }
 
         void moveSkyLine(){
           for(var i = 0; i < buildingList.size(); i++){
-            Building currentBuilding = buildingList.get(i);
+            currentBuilding = buildingList.get(i);
             currentBuilding.moveBuilding();
-            xPos += 3;
+						//println(i);
+            xPos += 1;
           }
         }
       }
@@ -73,15 +84,15 @@
         //constructor
         Building(var x, var bw){
           bHeight = random(150, 200);
-          bWdith = bw;
+          bWidth = bw;
           centerX = x;
           centerY = 400-bHeight;
           bColor = color(random(150, 255), random(190, 255), 255);
         }
 
         void drawBuilding(){
-          fill(bColor);
-            rect(x, centerY, bw, bHeight);
+          fill(255);
+            rect(centerX, centerY, bWidth, bHeight);
         }
 
         void moveBuilding(){
@@ -89,7 +100,7 @@
         }
 
         void mvBuilding(){
-          x += 3;
+          centerX += 1;
         }
 
       }
