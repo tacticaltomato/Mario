@@ -22,8 +22,7 @@
 
       void draw(){
         background(bg);
-        sl.addBuilding();
-        sl.drawSkyLine();
+				sl.fillSkyLine();
 				sl.moveSkyLine();
       }
 
@@ -40,9 +39,18 @@
           xPos = 0;
           cbw = (int) random (20, 80);
 					buildingList.add(new Building(0, cbw));
+					fillSkyLine();
         }
 
-        void drawSkyLine(){
+				void moveSkyLine(){
+					for(var i = 0; i < buildingList.size(); i++){
+						println("hello");
+						drawSkyLine();
+						update();
+					}
+				}
+
+				void drawSkyLine(){
           //println(buildingList.size());
           for(var i = 0; i < buildingList.size(); i++){
 						//println(i);
@@ -54,30 +62,34 @@
           }
         }
 
-        void addBuilding(){
+        void update(){
+          for(var i = 0; i < buildingList.size(); i++){
+						//println(i);
+            currentBuilding = buildingList.get(i);
+            currentBuilding.moveBuilding();
+            xPos += 1;
+          }
+        }
+
+				void addBuilding(){
           //println("about to add building");
           //println(cbw);
           currentBuilding = new Building (0, cbw);
-					println(xPos+" "+cbw);
-					if(xPos%(2*cbw)==0){
-						buildingList.add(currentBuilding);
-					}
-
+					//println(xPos+" "+cbw);
+					buildingList.add(currentBuilding);
           //xPos += cbw;
           //println("added building");
         }
 
-        void moveSkyLine(){
-          for(var i = 0; i < buildingList.size(); i++){
-            currentBuilding = buildingList.get(i);
-            currentBuilding.moveBuilding();
-						//println(i);
-            xPos += 1;
-          }
-        }
+				void fillSkyLine({
+					while((700/cbw)>0){
+						addbuilding();
+					}
+				}
+
       }
 
-      class Building{
+      class Building {
         //attributes
         var centerX, centerY, bHeight, bWidth, bColor;
 
