@@ -5,7 +5,7 @@
 		<script type="text/processing" data-processing-target="mycanvas">
 
 		//Building testBuilding = new Building(0, random(30,100));
-			Skyline sl = new Skyline();
+		Skyline sl = new Skyline();
 		//TODO: Create an instance of your Skyline object
 
         //since these are variables we don't want to ever change in the code, we capitalize them
@@ -18,77 +18,20 @@
         void setup() {
           size(WINDOW_WIDTH, WINDOW_HEIGHT); //sets the size of the window
           frameRate(30); //how many times the draw function is called per second
+          sl.fillSkyline();
         }
 
         //called repeatedly
         void draw() {
-        	background(0); //needed in the draw function to "clear" the screen between updates
-	  		//testBuilding.drawAndUpdate();
-	  		//TODO: Call drawSkyline on your Skyline object
-				sl.fillSkyline();
-				sl.moveSkyline();
+        	background(GREY); //needed in the draw function to "clear" the screen between updates
+			sl.drawSkyline();
         }
 
-
-		class Skyline {
-			ArrayList<Building> buildingList;
-			var xPosition;
-			var totalBWidth;
-
-			Skyline(){
-				buildingList = new ArrayList<Building>();
-				xPosition = 0;
-				totalBWidth = 0;
-				fillSkyline();//when a Skyline is created it automatically has enough buildings to fill the screen
-			}
-
-			void moveSkyline(){ //TODO:update and draw the skyline, add buildings as buildings leave the screen
-				update();
-				println("updated");
-				drawSkyline();
-				println("drew");
-			}
-
-			void drawSkyline(){
-				for(var i = 0; i < buildingList.size(); i++){
-					Building currentBuilding = buildingList.get(i);
-					currentBuilding.drawBuilding();
-					println("drawBuilding");
-				}
-			}
-
-			void update(){ //TODO:loop through buildingList and update each Building
-				for(var i = 0; i < buildingList.size(); i++){
-					Building currentBuilding = buildingList.get(i);
-					currentBuilding.update();
-				}
-			}
-
-			void addBuilding(){
-				var randomBuildingWidth = (int) random(20,80);
-				Building currentBuilding = new Building(xPosition, randomBuildingWidth);
-				println(xPosition+" "+randomBuildingWidth);
-				buildingList.add(currentBuilding);
-				xPosition += randomBuildingWidth;
-			}
-
-			void fillSkyline(){ //TODO:add enough buildings to fill the screen
-				while(WINDOW_WIDTH > totalBWidth){
-					addBuilding();
-					//rintln("added");
-					//println(buildingList);
-					totalBWidth += randomBuildingWidth;
-					//if(totalBWidth > 700){
-						//totalBWidth -= randomBuildingWidth;
-					//}
-				}
-			}
-		}
 
         class Building {
         	var xPosition, yPosition, buildingHeight, buildingWidth;
         	var buildingColor;
-        	Building(var xPos, var bw ) {
+        	Building(var xPos, var bw) {
         		buildingHeight = random(30,250);
         		buildingWidth = bw;
         		xPosition = xPos;
@@ -111,6 +54,51 @@
         	}
 
         }
+        class Skyline {
+			ArrayList<Building> buildingList;
+			var xPosition;
+			var totalBWidth;
+			var randomBuildingWidth;
+
+			Skyline(){
+				buildingList = new ArrayList<Building>();
+				xPosition = 0;
+				totalBWidth = 0;
+				fillSkyline();//when a Skyline is created it automatically has enough buildings to fill the screen
+			}
+
+			void moveSkyline(){ //TODO:update and draw the skyline, add buildings as buildings leave the screen
+				update();
+				println("updated");
+				drawSkyline();
+				println("drew");
+			}
+			void addBuilding(){
+				var randomBuildingWidth = random(20,80);
+				buildingList.add(new Building(xPosition,randomBuildingWidth));
+				xPosition += randomBuildingWidth;
+			}
+			void fillSkyline(){ //TODO:add enough buildings to fill the screen
+				while(WINDOW_WIDTH > xPosition){
+					addBuilding();
+				}
+			}
+			void drawSkyline(){
+				for(var i = 0; i < buildingList.size(); i++){
+					Building currentBuilding = buildingList.get(i);
+					currentBuilding.drawBuilding();
+					//println("drawBuilding");
+				}
+			}
+
+			void update(){ //TODO:loop through buildingList and update each Building
+				for(var i = 0; i < buildingList.size(); i++){
+					Building currentBuilding = buildingList.get(i);
+					currentBuilding.update();
+				}
+			}
+
+		}
         </script>
     </head>
 

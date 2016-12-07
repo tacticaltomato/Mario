@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <title>CityScroller</title>
+    <script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+        // Declare and contruct two objects (h1, h2) from the class HorizontalLine 
+        
+        // Declare and contruct two objects (h1, h2) from the class HorizontalLine
+        
+        int WINDOW_WIDTH = 1240;
+        int WINDOW_HEIGHT = 650;
+        int RIGHT_ARROW = 39;
+        int LEFT_ARROW = 37;
+        Skyline slowSkyline = new Skyline(2,50,150,20,4);
+        Skyline fastSkyline = new Skyline(4,160,250,50,2);
+        Skyline prettyFastSkyline = new Skyline(6,260,350,80,5);  
+      
+        int REFRESH_RATEPER_SECOND = 30;
+        int GREY = 204;
+        //runs once at the start of the program 
+        void setup() 
+        {
+        
+          size(WINDOW_WIDTH, WINDOW_HEIGHT);
+        
+          slowSkyline.addSkyline();
+          fastSkyline.addSkyline();
+          prettyFastSkyline.addSkyline();
+
+        
+        }
+        
+        
+        //called repeatedly 
+        void draw() { 
+        
+          background(GREY);
+
+          slowSkyline.drawSkyline();
+          if (keyPressed && keyCode == RIGHT_ARROW) {
+              slowSkyline.updateAndRefill();
+            }
+         fastSkyline.drawSkyline();
+         if (keyPressed && keyCode == RIGHT_ARROW) {
+            fastSkyline.updateAndRefill();
+            }
+         prettyFastSkyline.drawSkyline();
+         if (keyPressed && keyCode == RIGHT_ARROW) {
+            prettyFastSkyline.updateAndRefill();
+            }
+      
+      
+
+
+          
+        } 
+        
+        class tower{
+        var tX, tY, tW;
+
+        tower(var towerX, towerY, towerW){
+        tX = towerX;
+        tY = towerY;
+        tW = towerW;
+        }
+        void drawTower(){
+        rect(tX+tW/4, tY-30, tW/2, 30);
+        rect(tX+tW/2.1, tY-70, 5,40);
+        }
+        void update(){
+        tX--;
+        }
+        }
+        
+        class Building { 
+          
+          //attributes
+          float By, Bx, Bw, s, c; 
+        
+          //constructor 
+          Building(int BuildingY, float BuildingX, float BuildingW, float speed, float color) {  
+        
+            By = BuildingY; 
+        
+            Bx = BuildingX; 
+
+            Bw = BuildingW;
+
+            s = speed;
+
+            c = color;
+
+          } 
+          
+          
+          void drawBuilding() 
+          {
+          fill(c,c,c);
+          rect(Bx, By, Bw, height-By);
+      }
+
+          void update(){
+          Bx-=s;
+          }
+          int getBx(){
+          return Bx;
+          }
+          int getBy(){
+          returnBy;
+          }
+
+        
+        }
+
+        class Skyline{
+          var xPos;
+          ArrayList<Building> BuildingList; 
+          ArrayList<Tower> TowerList;
+          var bw;
+          float SkyS;
+          float UpperLimit;
+          float LowerLimit;
+          float Sc;
+          float i;
+    
+          Skyline(float SkySpeed, float LowL, float UpL, float SkylineColor, float randomInteger) {  
+            xPos = 0;
+            SkyS = SkySpeed;
+            UpperLimit = UpL;
+            LowerLimit = LowL;
+            Sc = SkylineColor;
+            i = randomInteger;
+            bw = 0;
+            BuildingList = new ArrayList<Building>();
+            TowerList = new ArrayList<Tower>();
+          }
+          
+
+          void addBuilding() 
+            { 
+              bw = random(50,150);
+              Y = random(LowerLimit,UpperLimit);
+              BuildingList.add(new Building(Y,xPos,bw,SkyS,Sc));
+              xPos += bw + 2;
+            } 
+          void addTower(){
+          TowerList.add(new tower(xPos,Y,bw));
+          }
+          void addSkyline(){
+            while (xPos < width){
+            addBuilding();
+            addTower();
+            }
+            }
+
+            void drawSkyline(){
+            for(var z = 0; z < BuildingList.size(); z++) {
+              Building currentBuilding = BuildingList.get(z);
+              currentBuilding.drawBuilding();
+            }
+            for(var h = 0; h < TowerList.size(); h++){
+            tower currenttower = TowerList.get(h);
+            currenttower.drawTower();
+            }
+          
+          }
+
+          void updateAndRefill(){
+          for(var b = 0; b < BuildingList.size(); b++) {
+              Building currentBuilding = BuildingList.get(b);
+              currentBuilding.update();
+              }
+          for(var h = 0; h < TowerList.size(); h++) {
+              tower currenttower = TowerList.get(h);
+              currenttower.update();
+              }
+          if (xPos > width - 100){
+          addBuilding();
+          }
+          Building firstBuilding = BuildingList.get(0);
+          if(firstBuilding.getBx() <= -200){
+          BuildingList.remove(0);
+            }
+          }
+
+          }
+      
+        
+  
+        </script> 
+    </head>
+    
+    <body>
+    <canvas id="mycanvas"></canvas>
+  </body>
+</html>
