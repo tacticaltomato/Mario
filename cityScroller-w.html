@@ -5,7 +5,7 @@
 		<script type="text/processing" data-processing-target="mycanvas">
 
 		//Building testBuilding = new Building(0, random(30,100));
-		Skyline btm = new Skyline();
+		Skyline btm = new Skyline(90, 3, color(255,255,255));
 		Skyline mid = new Skyline();
 		Skyline top = new Skyline();
 
@@ -37,21 +37,22 @@
         class Building {
         	var xPosition, yPosition, buildingHeight, buildingWidth;
         	var buildingColor;
-        	Building(var xPos, var bw) {
-        		buildingHeight = random(10,90);
+        	Building(var xPos, var bw, var bH, var bC) {
+        		buildingHeight = random(30, bH);
         		buildingWidth = bw;
         		xPosition = xPos;
-        		buildingColor = color(255);
+        		buildingColor = bC;
         	}
 
-        void drawAndUpdate(){
-        	var testSpeed = 5;
-					drawBuilding();
-					update(testSpeed);
-				}
+        // void drawAndUpdate(){
+        // 	var testSpeed = 5;
+				// 	drawBuilding();
+				// 	update(testSpeed);
+				// }
 
 	    	void drawBuilding(){
 	            fill(buildingColor);
+
 	    		rect(xPosition,WINDOW_HEIGHT - buildingHeight,buildingWidth,buildingHeight);
 	    	}
 
@@ -68,13 +69,19 @@
 			class Skyline {
 			ArrayList<Building> buildingList;
 			var xPosition;
-			var totalBWidth;
 			var randomBuildingWidth;
+			var buildingHeight;
+			var bW;
+			var buildingColor;
+			var UpperLimit;
+			var speed;
 
-			Skyline(){
+			Skyline(var bH, var s, var bC){
 				buildingList = new ArrayList<Building>();
 				xPosition = 0;
-				totalBWidth = 0;
+				buildingHeight = bH;
+				speed = s;
+				buildingColor = bC;
 				fillSkyline();//when a Skyline is created it automatically has enough buildings to fill the screen
 			}
 
@@ -87,10 +94,11 @@
 			}
 
 			void addBuilding(){
-				var randomBuildingWidth = random(60,80);
-				buildingList.add(new Building(xPosition,randomBuildingWidth));
+				var randomBuildingWidth = random(40,80);
+				buildingList.add(new Building(xPosition, randomBuildingWidth, buildingHeight, buildingColor));
 				xPosition += randomBuildingWidth;
 			}
+
 			void fillSkyline(){ //TODO:add enough buildings to fill the screen
 				var WINDOW_WIDTH  = 700;
 				while(WINDOW_WIDTH > xPosition){
@@ -108,9 +116,10 @@
 			void update(){ //TODO:loop through buildingList and update each Building
 				for(var i = 0; i < buildingList.size(); i++){
 					Building currentBuilding = buildingList.get(i);
-					currentBuilding.update(3);
+					currentBuilding.update(speed);
 					if(currentBuilding.getX() < 0){
 						addBuilding();
+						
 					}
 				}
 
