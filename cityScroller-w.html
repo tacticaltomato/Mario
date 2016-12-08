@@ -5,11 +5,15 @@
 		<script type="text/processing" data-processing-target="mycanvas">
 
 		//Building testBuilding = new Building(0, random(30,100));
-		Skyline sl = new Skyline();
+		Skyline btm = new Skyline();
+		Skyline mid = new Skyline();
+		Skyline top = new Skyline();
+
 		//TODO: Create an instance of your Skyline object
 
         //since these are variables we don't want to ever change in the code, we capitalize them
         var WINDOW_WIDTH = 700;
+
         var WINDOW_HEIGHT = 400;
         var GREY = 204;
 
@@ -18,13 +22,15 @@
         void setup() {
           size(WINDOW_WIDTH, WINDOW_HEIGHT); //sets the size of the window
           frameRate(30); //how many times the draw function is called per second
-          sl.fillSkyline();
+					//sl.fillSkyline();
+					width = WINDOW_WIDTH;
         }
 
         //called repeatedly
         void draw() {
         	background(GREY); //needed in the draw function to "clear" the screen between updates
-			sl.drawSkyline();
+					//sl.drawSkyline();
+					btm.moveSkyline();
         }
 
 
@@ -32,29 +38,34 @@
         	var xPosition, yPosition, buildingHeight, buildingWidth;
         	var buildingColor;
         	Building(var xPos, var bw) {
-        		buildingHeight = random(30,250);
+        		buildingHeight = random(10,90);
         		buildingWidth = bw;
         		xPosition = xPos;
         		buildingColor = color(255);
         	}
 
-        	void drawAndUpdate(){
-        		var testSpeed = 5;
-				drawBuilding();
-				update(testSpeed);
-			}
+        void drawAndUpdate(){
+        	var testSpeed = 5;
+					drawBuilding();
+					update(testSpeed);
+				}
 
-        	void drawBuilding(){
-                fill(buildingColor);
-        		rect(xPosition,WINDOW_HEIGHT - buildingHeight,buildingWidth,buildingHeight);
-        	}
+	    	void drawBuilding(){
+	            fill(buildingColor);
+	    		rect(xPosition,WINDOW_HEIGHT - buildingHeight,buildingWidth,buildingHeight);
+	    	}
 
-        	void update(var speed){
-        		xPosition += speed;
-        	}
+	    	void update(var speed){
+	    		xPosition -= speed;
+	    	}
 
-        }
-        class Skyline {
+				int getX(){
+					return xPosition;
+				}
+
+	    }
+
+			class Skyline {
 			ArrayList<Building> buildingList;
 			var xPosition;
 			var totalBWidth;
@@ -69,16 +80,19 @@
 
 			void moveSkyline(){ //TODO:update and draw the skyline, add buildings as buildings leave the screen
 				update();
-				println("updated");
+				//println("updated");
 				drawSkyline();
-				println("drew");
+				//println("drew");
+
 			}
+
 			void addBuilding(){
-				var randomBuildingWidth = random(20,80);
+				var randomBuildingWidth = random(60,80);
 				buildingList.add(new Building(xPosition,randomBuildingWidth));
 				xPosition += randomBuildingWidth;
 			}
 			void fillSkyline(){ //TODO:add enough buildings to fill the screen
+				var WINDOW_WIDTH  = 700;
 				while(WINDOW_WIDTH > xPosition){
 					addBuilding();
 				}
@@ -94,8 +108,12 @@
 			void update(){ //TODO:loop through buildingList and update each Building
 				for(var i = 0; i < buildingList.size(); i++){
 					Building currentBuilding = buildingList.get(i);
-					currentBuilding.update();
+					currentBuilding.update(3);
+					if(currentBuilding.getX() < 0){
+						addBuilding();
+					}
 				}
+
 			}
 
 		}
