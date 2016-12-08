@@ -119,7 +119,9 @@
 					currentBuilding.update(speed);
 					if(currentBuilding.getX() < 0){
 						addBuilding();
-						
+						if(currentBuilding.getX() < -100)
+						buildingList.remove(i);
+						i--;
 					}
 				}
 
