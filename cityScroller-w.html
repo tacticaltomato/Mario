@@ -9,6 +9,7 @@
 		Skyline btm = new Skyline(100, 3, color(191, 191, 191));
 		Skyline mid = new Skyline(250, 2, color(81, 81, 81));
 		Skyline top = new Skyline(350, 0.5, color(30, 30, 30));
+		//Star star = new Star(100, 100);
 		// PImage car;
 
 		//TODO: Create an instance of your Skyline object
@@ -25,7 +26,7 @@
           frameRate(30); //how many times the draw function is called per second
 					//sl.fillSkyline();
 					width = WINDOW_WIDTH;
-					
+
 					// car = loadImage("car.png");
 
         }
@@ -36,8 +37,27 @@
 					top.moveSkyline();
 					mid.moveSkyline();
 					btm.moveSkyline();
+					//star.drawStar();
         }
 
+				class Star {
+					var xPosition, yPosition, starColor;
+
+					Star(var xPos, yPos){
+						xPosition = xPos;
+						yPosition = ypos;
+						starColor = color(255, 255, 255);
+					}
+
+					void drawStar(){
+						fill(starColor);
+						ellipse(xPosition, yPosition, 100, 100);
+					}
+
+					void update(var speed){
+						xPosition-=speed;
+					}
+				}
 
         class Building {
         	var xPosition, yPosition, buildingHeight, buildingWidth;
@@ -49,15 +69,8 @@
         		buildingColor = bC;
         	}
 
-        // void drawAndUpdate(){
-        // 	var testSpeed = 5;
-				// 	drawBuilding();
-				// 	update(testSpeed);
-				// }
-
 	    	void drawBuilding(){
-	            fill(buildingColor);
-
+	        fill(buildingColor);
 	    		rect(xPosition,WINDOW_HEIGHT - buildingHeight,buildingWidth,buildingHeight);
 	    	}
 
@@ -68,11 +81,11 @@
 				int getX(){
 					return xPosition;
 				}
-
 	    }
 
 			class Skyline {
 			ArrayList<Building> buildingList;
+			// ArrayList<Star> starList;
 			var xPosition;
 			var randomBuildingWidth;
 			var buildingHeight;
@@ -83,6 +96,7 @@
 
 			Skyline(var bH, var s, var bC){
 				buildingList = new ArrayList<Building>();
+				// starList = new ArrayList<Star>();
 				xPosition = 0;
 				buildingHeight = bH;
 				speed = s;
@@ -92,10 +106,7 @@
 
 			void moveSkyline(){ //TODO:update and draw the skyline, add buildings as buildings leave the screen
 				update();
-				//println("updated");
 				drawSkyline();
-				//println("drew");
-
 			}
 
 			void addBuilding(){
@@ -104,18 +115,28 @@
 				xPosition += randomBuildingWidth;
 			}
 
+			// void addStar(){
+			// 	starList.add(new Star(xPosition, randomBuildingWidth));
+			// }
+
 			void fillSkyline(){ //TODO:add enough buildings to fill the screen
 				var WINDOW_WIDTH  = 700;
 				while(WINDOW_WIDTH > xPosition){
 					addBuilding();
+					// addStar();
 				}
 			}
+
 			void drawSkyline(){
 				for(var i = 0; i < buildingList.size(); i++){
 					Building currentBuilding = buildingList.get(i);
 					currentBuilding.drawBuilding();
-					//println("drawBuilding");
 				}
+
+				// for(var j = 0; j < starList.size(); j++){
+				// 	Star currentStar = starList.get(i);
+				// 	currentStar.drawStar();
+				// }
 			}
 
 			void update(){ //TODO:loop through buildingList and update each Building
@@ -125,16 +146,16 @@
 					if(currentBuilding.getX() < 0){
 						addBuilding();
 					}
-
 					if(currentBuilding.getX() < -currentBuilding.buildingWidth){
 						buildingList.remove(0);
 					}
-					//i--;
-
 				}
 
+				// for(var j = 0; j< starList.size(); j++){
+				// 	Star currentStar = starList.get(j);
+				// 	currentStar.update();
+				// }
 			}
-
 		}
         </script>
     </head>
