@@ -8,10 +8,10 @@
 		Skyline btm = new Skyline(100, 3, color(191, 191, 191));
 		Skyline mid = new Skyline(250, 2, color(81, 81, 81));
 		Skyline top = new Skyline(350, 0.5, color(30, 30, 30));
-		Star star = new Star(100, 100);
-        var WINDOW_WIDTH = 700;
-        var WINDOW_HEIGHT = 400;
-        var BLUE = color(6, 27, 61);
+		Star star = new Star(random(0, 700), random(0, 400));
+    var WINDOW_WIDTH = 700;
+    var WINDOW_HEIGHT = 400;
+    var BLUE = color(6, 27, 61);
 
 
         //This function only runs once at the start of the program
@@ -43,7 +43,7 @@
 
 					void drawStar(){
 						fill(starColor);
-						ellipse(xPosition, yPosition, 100, 100);
+						ellipse(xPosition, yPosition, 10, 10);
 					}
 
 					void update(var speed){
@@ -126,7 +126,7 @@
 				}
 
 				for(var j = 0; j < starList.size(); j++){
-					Star currentStar = starList.get(i);
+					Star currentStar = starList.get(j);
 					currentStar.drawStar();
 				}
 			}
@@ -145,7 +145,7 @@
 
 				for(var j = 0; j< starList.size(); j++){
 					Star currentStar = starList.get(j);
-					currentStar.update();
+					currentStar.update(speed);
 				}
 			}
 		}
