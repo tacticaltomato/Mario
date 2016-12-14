@@ -8,7 +8,7 @@
 		Skyline btm = new Skyline(100, 3, color(191, 191, 191));
 		Skyline mid = new Skyline(250, 2, color(81, 81, 81));
 		Skyline top = new Skyline(350, 0.5, color(30, 30, 30));
-		Star star = new Star(random(0, 700), random(0, 400));
+		Horizon star = new Horizon(800, 100);
     var WINDOW_WIDTH = 700;
     var WINDOW_HEIGHT = 400;
     var BLUE = color(6, 27, 61);
@@ -18,48 +18,96 @@
         void setup() {
           size(WINDOW_WIDTH, WINDOW_HEIGHT); //sets the size of the window
           frameRate(30); //how many times the draw function is called per second
-					//sl.fillSkyline();
 					width = WINDOW_WIDTH;
-
         }
 
         //called repeatedly
         void draw() {
         	background(BLUE); //needed in the draw function to "clear" the screen between updates
+					star.moveHorizon();
 					top.moveSkyline();
 					mid.moveSkyline();
 					btm.moveSkyline();
-
         }
 
-				class Star {
-					var xPosition, yPosition, starColor;
+			class Star {
+				var xPosition, yPosition, starColor;
 
-					Star(var xPos, var yPos){
-						xPosition = xPos;
-						yPosition = yPos;
-						starColor = color(255, 255, 255);
-					}
-
-					void drawStar(){
-						fill(starColor);
-						ellipse(xPosition, yPosition, 10, 10);
-					}
-
-					void update(var speed){
-						xPosition-=speed;
-					}
+				Star(var xPos, var yPos){
+					xPosition = xPos;
+					yPosition = yPos;
+					starColor = color(255, 255, 255);
 				}
 
-        class Building {
-        	var xPosition, yPosition, buildingHeight, buildingWidth;
-        	var buildingColor;
-        	Building(var xPos, var bw, var bH, var bC) {
-        		buildingHeight = random(30, bH);
-        		buildingWidth = bw;
-        		xPosition = xPos;
-        		buildingColor = bC;
-        	}
+				void drawStar(){
+					fill(starColor);
+					ellipse(xPosition, yPosition, 100, 100);
+				}
+
+				void updateStar(var speed){
+					xPosition-=speed;
+				}
+
+				int getXs(){
+					return xPosition;
+				}
+			}
+
+			class Horizon {
+				var xPosition;
+				var yPosition;
+				var speed;
+				ArrayList<Star> starList;
+
+			  Horizon(var xPos, var yPos){
+			    xPosition = xPos;
+			    yPosition = yPos;
+					speed = 1;
+					starList = new ArrayList<Star>();
+					addStar();
+			  }
+
+			  void moveHorizon(){
+			  	updateHorizon();
+			  	drawHorizon();
+			  }
+
+			  void addStar(){
+			    starList.add(new Star(xPosition, yPosition));
+					println(starList.size());
+			  }
+
+			  void drawHorizon(){
+				  for(var i = 0; i < starList.size(); i++){
+				    Star currentStar = starList.get(i);
+				    currentStar.drawStar();
+				  }
+			  }
+
+			  void updateHorizon(){
+				  for(var j = 0; j< starList.size(); j++){
+				    Star currentStar = starList.get(j);
+				    currentStar.updateStar(speed);
+						}
+						if(currentStar.getXs() < 0){
+							addStar();
+						if(currentStar.getXs() < -100){
+							buildingList.remove(0);
+						}
+				  }
+			  }
+			}
+
+
+      class Building {
+        var xPosition, yPosition, buildingHeight, buildingWidth;
+        var buildingColor;
+        Building(var xPos, var bw, var bH, var bC) {
+      		buildingHeight = random(30, bH);
+      		buildingWidth = bw;
+      		xPosition = xPos;
+      		buildingColor = bC;
+      	}
 
 	    	void drawBuilding(){
 	        fill(buildingColor);
@@ -77,7 +125,6 @@
 
 			class Skyline {
 			ArrayList<Building> buildingList;
-			ArrayList<Star> starList;
 			var xPosition;
 			var randomBuildingWidth;
 			var buildingHeight;
@@ -88,7 +135,6 @@
 
 			Skyline(var bH, var s, var bC){
 				buildingList = new ArrayList<Building>();
-				starList = new ArrayList<Star>();
 				xPosition = 0;
 				buildingHeight = bH;
 				speed = s;
@@ -107,15 +153,10 @@
 				xPosition += randomBuildingWidth;
 			}
 
-			void addStar(){
-				starList.add(new Star(xPosition, randomBuildingWidth));
-			}
-
 			void fillSkyline(){ //TODO:add enough buildings to fill the screen
 				var WINDOW_WIDTH  = 700;
 				while(WINDOW_WIDTH > xPosition){
 					addBuilding();
-					addStar();
 				}
 			}
 
@@ -123,11 +164,6 @@
 				for(var i = 0; i < buildingList.size(); i++){
 					Building currentBuilding = buildingList.get(i);
 					currentBuilding.drawBuilding();
-				}
-
-				for(var j = 0; j < starList.size(); j++){
-					Star currentStar = starList.get(j);
-					currentStar.drawStar();
 				}
 			}
 
@@ -141,11 +177,6 @@
 					if(currentBuilding.getX() < -currentBuilding.buildingWidth){
 						buildingList.remove(0);
 					}
-				}
-
-				for(var j = 0; j< starList.size(); j++){
-					Star currentStar = starList.get(j);
-					currentStar.update(speed);
 				}
 			}
 		}
