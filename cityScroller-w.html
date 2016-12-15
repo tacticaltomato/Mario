@@ -12,7 +12,6 @@
 		Skyline top = new Skyline(350, 0.5, color(30, 30, 30));
 		Horizon star = new Horizon(800, 100);
 		Car testcar = new Car(100, 350);
-		// Floor floor = new Floor(0,470);
 
     var WINDOW_WIDTH = 700;
     var WINDOW_HEIGHT = 400;
@@ -42,22 +41,7 @@
 					if (keyPressed && keyCode == LEFT_ARROW){
 						testcar.moveCarLeft();
 					}
-					// floor.drawFloor();
-
         }
-
-				// class Floor {
-				// 	var xPosition, yPosition;
-				//
-				// 	Car(var xPos, var yPos){
-				// 		xPosition = xPos;
-				// 		yPosition = yPos;
-				// 	}
-				//
-				// 	void drawFloor(){
-				// 		rect(xPosition, yPosition, 700, 30);
-				// 	}
-				// }
 
 				/* @pjs preload="car.png"; */
 				class Car {
