@@ -4,20 +4,21 @@
 		<script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
 		<script type="text/processing" data-processing-target="mycanvas">
 
-		/* @pjs preload="car.png"; */
+
 
 		//Skyline(var bH, var s, var bC);
 		Skyline btm = new Skyline(100, 3, color(191, 191, 191));
 		Skyline mid = new Skyline(250, 2, color(81, 81, 81));
 		Skyline top = new Skyline(350, 0.5, color(30, 30, 30));
 		Horizon star = new Horizon(800, 100);
-		Trvel car = new Travel(0, 600);
-
-		PImage car;
+		Car testcar = new Car(100, 350);
+		// Floor floor = new Floor(0,470);
 
     var WINDOW_WIDTH = 700;
     var WINDOW_HEIGHT = 400;
     var BLUE = color(6, 27, 61);
+		var RIGHT_ARROW = 39;
+		var LEFT_ARROW = 37;
 
 
         //This function only runs once at the start of the program
@@ -25,9 +26,6 @@
           size(WINDOW_WIDTH, WINDOW_HEIGHT); //sets the size of the window
           frameRate(30); //how many times the draw function is called per second
 					width = WINDOW_WIDTH;
-
-					car = loadImage("car.png");
-
         }
 
         //called repeatedly
@@ -37,75 +35,64 @@
 					top.moveSkyline();
 					mid.moveSkyline();
 					btm.moveSkyline();
-					// if (keyPressed && keyCode == RIGHT){
-					// 	car.moveTravel();
-					// }
+					testcar.drawCar();
+					if (keyPressed && keyCode == RIGHT_ARROW){
+						testcar.moveCarRight();
+					}
+					if (keyPressed && keyCode == LEFT_ARROW){
+						testcar.moveCarLeft();
+					}
+					// floor.drawFloor();
+
         }
 
+				// class Floor {
+				// 	var xPosition, yPosition;
+				//
+				// 	Car(var xPos, var yPos){
+				// 		xPosition = xPos;
+				// 		yPosition = yPos;
+				// 	}
+				//
+				// 	void drawFloor(){
+				// 		rect(xPosition, yPosition, 700, 30);
+				// 	}
+				// }
+
+				/* @pjs preload="car.png"; */
 				class Car {
 					var xPosition, yPosition;
+					PImage car;
 
 					Car(var xPos, var yPos){
 						xPosition = xPos;
 						yPosition = yPos;
+						car = loadImage("car.png");
+					}
+
+					void moveCarRight(){
+						updateCarRight(5);
+						drawCar();
+					}
+
+					void moveCarLeft(){
+						updateCarLeft(5);
+						drawCar();
 					}
 
 					void drawCar(){
-						image(car, xPosition, yPosition, 100, 100);
+						image(car, xPosition, yPosition, 200, 50);
 					}
 
-					void updateCar(var speed){
+					void updateCarRight(var speed){
 						xPosition+=speed;
 					}
 
-					int getXc(){
-						return xPosition;
+					void updateCarLeft(var speed){
+						xPosition-=speed;
 					}
 				}
 
-				class Travel {
-					var xPosition;
-					var yPosition;
-					var speed;
-					ArrayList<Car> carList;
-
-				  Travel(var xPos, var yPos){
-				    xPosition = xPos;
-				    yPosition = yPos;
-						speed = 1;
-						carList = new ArrayList<Car>();
-						addCar();
-				  }
-
-				  void moveTravel(){
-						updateTravel();
-					  drawTravel();
-				  }
-
-				  void addCar(){
-				    carList.add(new Car(xPosition, yPosition));
-				  }
-
-				  void drawCar(){
-					  for(var i = 0; i < carList.size(); i++){
-					    Car currentCar = carList.get(i);
-					    currentCar.drawCar();
-					  }
-				  }
-
-				  void updateTravel(){
-					  for(var j = 0; j< carList.size(); j++){
-						    Star currentCar = carList.get(j);
-						    currentCar.updateCar(speed);
-							}
-							if(currentStar.getXc() > 700){
-								addCar();
-							if(currentStar.getXc() > 800){
-								buildingList.remove(0);
-							}
-					  }
-				  }
-				}
 
 			class Star {
 				var xPosition, yPosition, starColor;
